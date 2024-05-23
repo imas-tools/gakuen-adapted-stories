@@ -1,7 +1,9 @@
 import os
 import shutil
 
-def move_csv_files(root_dir):
+def move_csv_files(root_dir, dest_dir=None):
+    if dest_dir is None:
+        dest_dir = root_dir
     # 遍历根目录及其子目录下的所有文件
     for subdir, _, files in os.walk(root_dir):
         for file in files:

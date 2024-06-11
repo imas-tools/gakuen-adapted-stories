@@ -5,7 +5,7 @@ if __name__ == "__main__":
     files = os.listdir("./raw")
     for file in files:
         
-        if not file.endswith(".txt"):
+        if not file.endswith(".txt") or not file.startswith("adv_"):
             continue
         with open("./raw/" + file, "r", encoding="utf-8") as f:
             dest = f'./tmp/{file.replace(".txt", ".csv")}'

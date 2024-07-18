@@ -1,0 +1,50 @@
+name: Update csv
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  update_csv:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: main
+    
+    - name: Setup Python environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Get game resources
+      uses: actions/checkout@v4
+      with:
+        repository: DreamGallery/Campus-adv-txts
+        ref: main
+        path: Campus_adv_txts
+
+    - name: copy txt to tmp
+      run: |
+        mkdir main/raw
+        cp -r Campus_adv_txts/Resource/adv* main/raw
+    
+    - name: run script to generate csv
+      run: |
+        pip install imas_tools
+        python main.py
+        python move.py
+      working-directory:
+        main
+    
+    - name: Commit update
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Update new csv
+        repository: main
+        
